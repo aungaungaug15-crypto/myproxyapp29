@@ -1,16 +1,15 @@
 import os
-import gradio as gr
+from http.server import HTTPServer, BaseHTTPRequestHandler
 
-def check_status():
-    return "Server is successfully running on Render!"
-
-demo = gr.Interface(
-    fn=check_status,
-    inputs=[],
-    outputs="text",
-    title="Proxy Status"
-)
+class SimpleHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write(b"Server is successfully running on Render!")
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    demo.launch(server_name="0.0.0.0", server_port=port)
+    server = HTTPServer(("0.0.0.0", port), SimpleHandler)
+    print(f"Server running on port {port}")
+    server.serve_forever()
