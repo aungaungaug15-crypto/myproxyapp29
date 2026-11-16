@@ -1,3 +1,4 @@
+import os
 import gradio as gr
 
 def check_status():
@@ -11,5 +12,5 @@ demo = gr.Interface(
 )
 
 if __name__ == "__main__":
-    demo.launch(server_name="0.0.0.0", server_port=10000)
-  
+    port = int(os.environ.get("PORT", 10000))
+    demo.launch(server_name="0.0.0.0", server_port=port)
